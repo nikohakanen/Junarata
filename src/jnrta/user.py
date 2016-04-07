@@ -5,8 +5,8 @@ Created on Mar 17, 2016
 '''
 import sys
 from PyQt4.QtGui import *
-from pkt.alusta import *
-from pkt.kappale import *
+from jnrta.alusta import *
+from jnrta.kappale import *
 
 class User(QMainWindow):
     '''
