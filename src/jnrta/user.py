@@ -31,11 +31,6 @@ class User(QMainWindow):
         wg = Alusta() #set Alusta as wg
         self.setCentralWidget(wg)
         
-        kpl1 = Ratakappale()
-        kpl2 = Ratakappale()
-        wg.lisaaKpl(kpl1)
-        wg.lisaaKpl(kpl2)
-        
         self.setGeometry(100, 100, 900, 700)
         self.setWindowTitle('Pienoisrautatie')
         self.show()

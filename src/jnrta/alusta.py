@@ -41,19 +41,7 @@ class Alusta(QWidget):
         qp = QPainter()
         qp.begin(self)
         color = QColor(0, 110, 10)
-        qp.setPen(QColor(0,0,0))
-        qp.drawLine(0,0,999,999)
-        
-        qp.drawRect(200,50,80,20)
-        
-        qp.drawRect(350,50,100,100)
-        qp.drawRect(0,0,200,200)
-        
-        qpp3 = QPainterPath()
-        qpp3.moveTo(430,100)
-        qpp3.arcTo(350,50,100,100,0,45)
-        
-        qp.drawPath(qpp3)
+        qp.setBrush(color)
         
         qp.end()
         
@@ -104,15 +92,25 @@ class Alusta(QWidget):
             qp2.end()
         
         qp.begin(self)
+        qp.setBrush(color)
         
         if self.buttonklik == 0: #Simuloi ratakappaleen lisäämistä
             qpp = QPainterPath()
-            qp.setBrush(color)
             
-            for ratapala in self.lista:
-                if ratapala.tyyppi == 1:
-                    qpp.addRect(60,60,100,20)
-            
+            for ratapala in self.lista: 
+                if ratapala.tyyppi in (1,2,3,4): #piirtää suorakulmaiset ratakappaleet
+                    qpp.addRect(ratapala.sijainti[0],ratapala.sijainti[1],ratapala.leveys,ratapala.korkeus)
+                
+                if ratapala.tyyppi in (5,6,7,8): #piirtää kaarteet
+                    
+                    ###KESKEN###
+                    
+                    #qpp.moveTo(ratapala.sijainti[0]+2*r-a,ratapala.sijainti[1]+r)
+                    #qpp.arcTo(x,y,2*r,2*r,0,ang)
+                    
+                    #qpp.arcTo(x+a,y+a,2*(r-a),2*(r-a),45,-45)
+                    xasd = 1
+                    
             qp.drawPath(qpp)    
             
             qpp4 = QPainterPath()        
@@ -132,8 +130,17 @@ class Alusta(QWidget):
         
     def buttonClicked(self):
 
+        #lisätään muutama kappale alustalle
+
+        stopperi = Stopperi([750,600])
+        minisuora = Suora1([780,600])
+        normisuora = Suora2([750,650])
+        
+        self.lisaaKpl(stopperi)
+        self.lisaaKpl(minisuora)
+        self.lisaaKpl(normisuora)
+
         self.buttonklik = 0
-        self.lista[0].tyyppi = 1
         self.update()
 
             
