@@ -71,18 +71,59 @@ class Kaarre45(Ratakappale):
 
         x = sijainti[0]
         y = sijainti[1]
-        r = 100
+        self.r = 100
+        self.ang = 45
         a = 20
-        ang = 45
-        ang_rad = math.radians(ang)
-        arc_x = x + r + (r-a/2)*math.cos(ang_rad/2)
-        arc_y = y + r - (r-a/2)*math.sin(ang_rad/2)
+        ang_rad = math.radians(self.ang)
+        arc_x = x + self.r + (self.r-a/2)*math.cos(ang_rad/2)
+        arc_y = y + self.r - (self.r-a/2)*math.sin(ang_rad/2)
         
-        super().__init__([arc_x,arc_y], 0, 200, 200, sijainti, 5)
+        super().__init__([arc_x,arc_y], 0, 2*self.r, 2*self.r, sijainti, 5)
     
+class Kaarre30(Ratakappale):
+
+    def __init__(self, sijainti):
+
+        x = sijainti[0]
+        y = sijainti[1]
+        self.r = 100
+        self.ang = 30
+        a = 20
+        ang_rad = math.radians(self.ang)
+        arc_x = x + self.r + (self.r-a/2)*math.cos(ang_rad/2)
+        arc_y = y + self.r - (self.r-a/2)*math.sin(ang_rad/2)
+        
+        super().__init__([arc_x,arc_y], 0, 2*self.r, 2*self.r, sijainti, 6)
     
-    
-    
+class Kaarre45mini(Ratakappale):
+
+    def __init__(self, sijainti):
+
+        x = sijainti[0]
+        y = sijainti[1]
+        self.r = 50
+        self.ang = 45
+        a = 20
+        ang_rad = math.radians(self.ang)
+        arc_x = x + self.r + (self.r-a/2)*math.cos(ang_rad/2)
+        arc_y = y + self.r - (self.r-a/2)*math.sin(ang_rad/2)
+        
+        super().__init__([arc_x,arc_y], 0, 2*self.r, 2*self.r, sijainti, 7)
+        
+class Kaarre30mini(Ratakappale):
+
+    def __init__(self, sijainti):
+
+        x = sijainti[0]
+        y = sijainti[1]
+        self.r = 50
+        self.ang = 30
+        a = 20
+        ang_rad = math.radians(self.ang)
+        arc_x = x + self.r + (self.r-a/2)*math.cos(ang_rad/2)
+        arc_y = y + self.r - (self.r-a/2)*math.sin(ang_rad/2)
+        
+        super().__init__([arc_x,arc_y], 0, 2*self.r, 2*self.r, sijainti, 8)
     
     
     
