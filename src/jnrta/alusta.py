@@ -4,21 +4,19 @@ Created on Mar 29, 2016
 @author: hakanen1
 '''
 from PyQt4.QtGui import *
-from jnrta.kappale import *
+from jnrta import kappale
 import math
 
-class Alusta(QWidget):
+class Alusta(QGraphicsView):
     '''
     classdocs
     '''
 
 
-    def __init__(self):
+    def __init__(self,scene):
         super(Alusta, self).__init__()
         
         self.lista = []
-        
-        
         self.buttonklik = -1
         self.initUI()
         
@@ -33,7 +31,15 @@ class Alusta(QWidget):
     
     def paintEvent(self, e):
         
+        painter = QPainter()
+        painter.begin(self)
+        
         color = QColor(0, 110, 10)
+        pen = QPen(QColor(0,0,0))
+        brush = QBrush(color)
+        self.scene.addRect(100,200,50,50,pen,brush)
+        
+        painter.end()
         
         if self.buttonklik == 0: #Simuloi ratakappaleen lisäämistä
             for ratapala in self.lista: 
