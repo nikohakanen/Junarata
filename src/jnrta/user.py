@@ -6,7 +6,6 @@ Created on Mar 17, 2016
 import sys
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from jnrta.alusta import *
 from jnrta.kappale import *
 from jnrta.centralwidget import *
 
@@ -19,18 +18,19 @@ class User(QMainWindow):
     def __init__(self):
         super(User, self).__init__()
         
+        self.kappalelista = []
         self.initUI()
         
     def initUI(self):      
 
         mb = self.menuBar()
-        mb.addMenu('Tiedosto')
-        mb.addMenu('Kappale')
+        fileMenu = mb.addMenu('Tiedosto')
+        kappaleMenu = mb.addMenu('Kappale')
         
         tb = QToolBar()
         self.addToolBar(tb)
 
-        self.cw = CentralWidget(self)
+        self.cw = CentralWidget(self, self.kappalelista)
         
         self.setGeometry(0, 0, 920, 720)
         self.setWindowTitle('Pienoisrautatie')
@@ -39,75 +39,129 @@ class User(QMainWindow):
         self.setCentralWidget(self.cw.view)
         self.show()
         
+        saveAction = QAction("Tallenna", self)
+        self.connect(saveAction, SIGNAL("triggered()"), self.tallennaRata)
+        fileMenu.addAction(saveAction)
+        
+        openAction = QAction("Avaa", self)
+        self.connect(openAction, SIGNAL("triggered()"), self.avaaRata)
+        fileMenu.addAction(openAction)
         
         action0 = QAction("Stopperi",self)
         self.connect(action0, SIGNAL("triggered()"), self.setValitseKpl0)
         tb.addAction(action0)
         
+        action1 = QAction("suora1",self)
+        self.connect(action1, SIGNAL("triggered()"), self.setValitseKpl1)
+        tb.addAction(action1)
+        
+        action2 = QAction("suora2",self)
+        self.connect(action2, SIGNAL("triggered()"), self.setValitseKpl2)
+        tb.addAction(action2)
+        
+        action3 = QAction("suora3",self)
+        self.connect(action3, SIGNAL("triggered()"), self.setValitseKpl3)
+        tb.addAction(action3)
+        
+        action4 = QAction("kaarre45",self)
+        self.connect(action4, SIGNAL("triggered()"), self.setValitseKpl4)
+        tb.addAction(action4)
+        
         action5 = QAction("Kaarre30",self)
         self.connect(action5, SIGNAL("triggered()"), self.setValitseKpl5)
         tb.addAction(action5)
+        
+        action6 = QAction("Kaarre45mini",self)
+        self.connect(action6, SIGNAL("triggered()"), self.setValitseKpl6)
+        tb.addAction(action6)
+        
+        action7 = QAction("Kaarre30mini",self)
+        self.connect(action7, SIGNAL("triggered()"), self.setValitseKpl7)
+        tb.addAction(action7)
+        
+    def tallennaRata(self):
+        fileName = QFileDialog.getSaveFileName(self, 'Save File','jnrta','*.txt')
+        fileName = fileName + '.txt'
+        with open(fileName, mode='w') as f:
+            for kpl in self.kappalelista:
+                f.write('{}\n{}\n{}\n{}\n'.format(kpl.tyyppi, kpl.item.pos().x(), kpl.item.pos().y(), kpl.kierto))
     
-    def test(self):
-        color = QColor(0, 110, 10)
-        pen = QPen(QColor(0,0,0))
-        brush = QBrush(color)
-        
-        qpp = QPainterPath()
-        
-        kaarre45 = Kaarre45([700,500])
-        xk = kaarre45.sijainti[0]
-        yk = kaarre45.sijainti[1]
-        ak = 20
-        rk = kaarre45.r
-        angk = kaarre45.ang
-        qpp.moveTo(xk+2*rk-ak,yk+rk)
-        qpp.arcTo(xk,yk,2*rk,2*rk,0,angk)
-        
-        qpp.arcTo(xk+ak,yk+ak,2*(rk-ak),2*(rk-ak),angk,-angk)
-        self.cw.scene.addRect(xk+rk,yk,rk,rk)
-        
-        pathitem = QGraphicsPathItem()
-        pathitem.setPen(pen)
-        pathitem.setBrush(brush)
-        pathitem.setPath(qpp)
-        self.cw.scene.addItem(pathitem)
-
-        self.cw.scene.addRect(400,400,200,200)
-        self.cw.scene.addRect(400+100,400,100,100)
-        
-        self.cw.scene.addRect(0,0,200,200)
+    def avaaRata(self):
+        fileName = QFileDialog.getOpenFileName(self, 'Open File','jnrta','*.txt')
+        f = open(fileName)
+        line = f.readline().rstrip('\n')
+        while line != '':
+            tyyppi = int(line)
+            x = float(f.readline().rstrip('\n'))
+            y = float(f.readline().rstrip('\n'))
+            kierto = float(f.readline().rstrip('\n'))
+            line = f.readline().rstrip('\n')
+            ### IF ERROR RAISE ERROR EXCEPTION ####
+            self.valitseKpl(tyyppi, x, y, kierto, 0)
+        self.cw.view.rakenna()
     
     def setValitseKpl0(self):
-        self.valitseKpl(0)
-        
+        self.valitseKpl(0, -100, -100, 0, 1)
+    def setValitseKpl1(self):
+        self.valitseKpl(1, -100, -100, 0, 1)
+    def setValitseKpl2(self):
+        self.valitseKpl(2, -100, -100, 0, 1)
+    def setValitseKpl3(self):
+        self.valitseKpl(3, -100, -100, 0, 1)
+    def setValitseKpl4(self):
+        self.valitseKpl(4, -100, -100, 0, 1)
     def setValitseKpl5(self):
-        self.valitseKpl(5)
+        self.valitseKpl(5, -100, -100, 0, 1)
+    def setValitseKpl6(self):
+        self.valitseKpl(6, -100, -100, 0, 1)
+    def setValitseKpl7(self):
+        self.valitseKpl(7, -100, -100, 0, 1)
         
-    def valitseKpl(self, nro):
+    def valitseKpl(self, nro, x, y, kierto, selected):
         if nro == 0:
-            stopperi = Stopperi([-100,-100])
-            self.lisaaKpl(stopperi)
+            stopperi = Stopperi([x,y])
+            self.lisaaKpl(stopperi, kierto,selected)
+        if nro == 1:
+            suora1 = Suora1([x,y])
+            self.lisaaKpl(suora1, kierto, selected)
+        if nro == 2:
+            suora2 = Suora2([x,y])
+            self.lisaaKpl(suora2, kierto, selected)
+        if nro == 3:
+            suora3 = Suora3([x,y])
+            self.lisaaKpl(suora3, kierto, selected)
+        if nro == 4:
+            k45 = Kaarre45([x,y])
+            self.lisaaKpl(k45, kierto, selected)
         if nro == 5:
-            kare30 = Kaarre30([-100,-100])
-            self.lisaaKpl(kare30)
+            k30 = Kaarre30([x,y])
+            self.lisaaKpl(k30, kierto, selected)
+        if nro == 6:
+            k45m = Kaarre45mini([x,y])
+            self.lisaaKpl(k45m, kierto, selected)
+        if nro == 7:
+            k30m = Kaarre30mini([x,y])
+            self.lisaaKpl(k30m, kierto, selected)
         
-    def lisaaKpl(self, ratakappale):
-        ratakappale.item().setParentItem(ratakappale)
+    def lisaaKpl(self, ratakappale, kierto, selected):
+        self.kappalelista.append(ratakappale)
+        ratakappale.item.setParentItem(ratakappale)
         self.cw.scene.addItem(ratakappale)
-        ratakappale.item().setSelected(True)
+        if selected == 1:
+            ratakappale.item.setSelected(True)
+        if selected == 0:
+            ratakappale.pyorita(kierto)
         
     def rotate(self, ratakappale, ang):
         ratakappale.pyorita(ang)
-        #ratakappale.item().setTransformOriginPoint(QPointF(ratakappale.keskikohta[0],ratakappale.keskikohta[1]))
-        #ratakappale.item().setRotation(ang)
-        #ratakappale.item().setTransformOriginPoint(QPointF(0,0))
+        #ratakappale.item.setTransformOriginPoint(QPointF(ratakappale.keskikohta[0],ratakappale.keskikohta[1]))
+        #ratakappale.item.setRotation(ang)
+        #ratakappale.item.setTransformOriginPoint(QPointF(0,0))
 
 def main():
     
         app = QApplication(sys.argv)
         usr = User()
-        #usr.test()
         sys.exit(app.exec_())
 
 if __name__ == '__main__':

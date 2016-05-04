@@ -12,12 +12,12 @@ class CentralWidget(QDialog):
     '''
 
 
-    def __init__(self, parent):
+    def __init__(self, parent, kappalelista):
         '''
         Constructor
         '''
         super(CentralWidget, self).__init__(parent)
-        self.view = MyView()
+        self.view = MyView(kappalelista)
         self.scene = QGraphicsScene(self)
         self.scene.setSceneRect(0,0,900,700)
         
