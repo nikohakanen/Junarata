@@ -22,6 +22,7 @@ class MyView(QGraphicsView):
         self.liitosOk = False
         self.tempLiitos = []
         self.tempVastin = []
+        self.textItem = None
         
     def mousePressEvent(self, event):
         selected_items = self.scene().selectedItems()
@@ -57,36 +58,6 @@ class MyView(QGraphicsView):
                 #currentItem.setPos(event.pos())
         #self.pathitem.setFlag(0x1,True) #ItemIsMovable
         #self.pathitem.setFlag(0x2,True)
-    
-    def mouseMoveEvent(self, event):
-        selected_items = self.scene().selectedItems()
-        if selected_items:
-            currentItem = selected_items[0]
-            currentItem.setBrush(QColor(0, 110, 10))
-            currentItem.setPos(event.pos())
-            self.liitosOk = False
-            self.tempLiitokset = []
-            self.tempVastineet = []
-            for anotherItem in self.kappalelista:
-                if anotherItem.item != currentItem:
-                    if currentItem.collidesWithItem(anotherItem.item,0x1):
-                        currentItem.setBrush(QColor(250, 0, 0))
-                    for liitoskohta in currentItem.parentItem().liitoskohdat:
-                        for vastakohta in anotherItem.liitoskohdat:
-                            if vastakohta.isFree():
-                                if liitoskohta.collidesWithItem(vastakohta,0x1):
-                                    dxy = liitoskohta.scenePos()-vastakohta.scenePos()
-                                    vastakierto = vastakohta.suunta + 180 - liitoskohta.suunta
-                                    
-                                    
-                                    currentItem.parentItem().pyorita(vastakierto)
-                                    currentItem.setPos(currentItem.scenePos()-dxy)
-                                    
-                                    self.liitosOk = True
-                                    if not liitoskohta in self.tempLiitokset:
-                                        self.tempLiitokset.append(liitoskohta)
-                                    if not vastakohta in self.tempVastineet:
-                                        self.tempVastineet.append(vastakohta)
                                 
             #print("##",event.pos().x(),event.pos().y(),"##")
             #print(currentItem.mapToScene(QPoint(0,0)).x(),currentItem.mapToScene(QPoint(0,0)).y())
@@ -103,6 +74,9 @@ class MyView(QGraphicsView):
             if key == 0x01000012: #Key_Right
                 currentItem.parentItem().pyorita(-5)
                 
+            if key == 0x01000007: #Delete
+                currentItem.parentItem().poista()
+                
     def rakenna(self):
         for currentItem in self.kappalelista:
             for anotherItem in self.kappalelista:
@@ -113,7 +87,24 @@ class MyView(QGraphicsView):
                                 if vastakohta.vapaa:
                                     if liitoskohta.collidesWithItem(vastakohta,0x1):
                                         liitoskohta.liita(vastakohta)
-            
+                                        
+    def LoopText(self):
+        self.textItem = QGraphicsTextItem()
+        self.textItem.setPlainText('Muodostui silmukka')
+        self.scene().addItem(self.textItem)
+        self.textItem.setZValue(2)
+        self.textItem.setPos(200,0)
+        
+        fontti = QFont()
+        fontti.setPointSize(40)
+        
+        self.textItem.setFont(fontti)
+        
+        timer = QTimer()
+        timer.singleShot(3000,self.removeLoopText)
+        
+    def removeLoopText(self):
+        self.scene().removeItem(self.textItem)
                 
         
         

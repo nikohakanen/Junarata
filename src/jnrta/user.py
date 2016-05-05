@@ -32,20 +32,28 @@ class User(QMainWindow):
 
         self.cw = CentralWidget(self, self.kappalelista)
         
-        self.setGeometry(0, 0, 920, 720)
+        self.setGeometry(0, 0, 1000, 800)
         self.setWindowTitle('Pienoisrautatie')
         
         
         self.setCentralWidget(self.cw.view)
         self.show()
         
-        saveAction = QAction("Tallenna", self)
-        self.connect(saveAction, SIGNAL("triggered()"), self.tallennaRata)
-        fileMenu.addAction(saveAction)
+        newAction = QAction("Uusi", self)
+        self.connect(newAction, SIGNAL("triggered()"), self.uusiRata)
+        fileMenu.addAction(newAction)
         
         openAction = QAction("Avaa", self)
         self.connect(openAction, SIGNAL("triggered()"), self.avaaRata)
         fileMenu.addAction(openAction)
+        
+        saveAction = QAction("Tallenna", self)
+        self.connect(saveAction, SIGNAL("triggered()"), self.tallennaRata)
+        fileMenu.addAction(saveAction)
+        
+        closeAction = QAction("Sulje", self)
+        self.connect(closeAction, SIGNAL("triggered()"), self.sulje)
+        fileMenu.addAction(closeAction)
         
         action0 = QAction("Stopperi",self)
         self.connect(action0, SIGNAL("triggered()"), self.setValitseKpl0)
@@ -79,43 +87,55 @@ class User(QMainWindow):
         self.connect(action7, SIGNAL("triggered()"), self.setValitseKpl7)
         tb.addAction(action7)
         
+    def uusiRata(self):
+        del self.kappalelista[:]
+        self.cw.scene.clear()
+        
     def tallennaRata(self):
         fileName = QFileDialog.getSaveFileName(self, 'Save File','jnrta','*.txt')
-        fileName = fileName + '.txt'
-        with open(fileName, mode='w') as f:
-            for kpl in self.kappalelista:
-                f.write('{}\n{}\n{}\n{}\n'.format(kpl.tyyppi, kpl.item.pos().x(), kpl.item.pos().y(), kpl.kierto))
+        if fileName:
+            if fileName.endswith('.txt'):
+                fileName = fileName
+            else:
+                fileName = fileName + '.txt'
+            with open(fileName, mode='w') as f:
+                for kpl in self.kappalelista:
+                    f.write('{}\n{}\n{}\n{}\n'.format(kpl.tyyppi, kpl.item.pos().x(), kpl.item.pos().y(), kpl.kierto))
     
     def avaaRata(self):
         fileName = QFileDialog.getOpenFileName(self, 'Open File','jnrta','*.txt')
-        f = open(fileName)
-        line = f.readline().rstrip('\n')
-        while line != '':
-            tyyppi = int(line)
-            x = float(f.readline().rstrip('\n'))
-            y = float(f.readline().rstrip('\n'))
-            kierto = float(f.readline().rstrip('\n'))
+        if fileName:
+            f = open(fileName)
             line = f.readline().rstrip('\n')
-            ### IF ERROR RAISE ERROR EXCEPTION ####
-            self.valitseKpl(tyyppi, x, y, kierto, 0)
-        self.cw.view.rakenna()
+            while line != '':
+                tyyppi = int(line)
+                x = float(f.readline().rstrip('\n'))
+                y = float(f.readline().rstrip('\n'))
+                kierto = float(f.readline().rstrip('\n'))
+                line = f.readline().rstrip('\n')
+                ### IF ERROR RAISE ERROR EXCEPTION ####
+                self.valitseKpl(tyyppi, x, y, kierto, 0)
+            self.cw.view.rakenna()
+        
+    def sulje(self):
+        self.close()
     
     def setValitseKpl0(self):
-        self.valitseKpl(0, -100, -100, 0, 1)
+        self.valitseKpl(0, -1000, -1000, 0, 1)
     def setValitseKpl1(self):
-        self.valitseKpl(1, -100, -100, 0, 1)
+        self.valitseKpl(1, -1000, -1000, 0, 1)
     def setValitseKpl2(self):
-        self.valitseKpl(2, -100, -100, 0, 1)
+        self.valitseKpl(2, -1000, -1000, 0, 1)
     def setValitseKpl3(self):
-        self.valitseKpl(3, -100, -100, 0, 1)
+        self.valitseKpl(3, -1000, -1000, 0, 1)
     def setValitseKpl4(self):
-        self.valitseKpl(4, -100, -100, 0, 1)
+        self.valitseKpl(4, -1000, -1000, 0, 1)
     def setValitseKpl5(self):
-        self.valitseKpl(5, -100, -100, 0, 1)
+        self.valitseKpl(5, -1000, -1000, 0, 1)
     def setValitseKpl6(self):
-        self.valitseKpl(6, -100, -100, 0, 1)
+        self.valitseKpl(6, -1000, -1000, 0, 1)
     def setValitseKpl7(self):
-        self.valitseKpl(7, -100, -100, 0, 1)
+        self.valitseKpl(7, -1000, -1000, 0, 1)
         
     def valitseKpl(self, nro, x, y, kierto, selected):
         if nro == 0:

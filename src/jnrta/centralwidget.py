@@ -5,6 +5,7 @@ Created on Apr 15, 2016
 '''
 from PyQt4.QtGui import *
 from jnrta.myview import *
+from jnrta.myscene import *
 
 class CentralWidget(QDialog):
     '''
@@ -18,7 +19,7 @@ class CentralWidget(QDialog):
         '''
         super(CentralWidget, self).__init__(parent)
         self.view = MyView(kappalelista)
-        self.scene = QGraphicsScene(self)
+        self.scene = MyScene(self)
         self.scene.setSceneRect(0,0,900,700)
         
         color = QColor(0, 110, 10)
@@ -26,3 +27,4 @@ class CentralWidget(QDialog):
         brush = QBrush(color)
         
         self.view.setScene(self.scene)
+        self.view.centerOn(QPointF(450,350))

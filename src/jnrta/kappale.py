@@ -40,6 +40,10 @@ class Ratakappale(QGraphicsItem):
         #self.item.setTransformOriginPoint(QPointF(self.keskikohta[0],self.keskikohta[1]))
         self.item.setRotation(self.kierto)
         #self.item.setTransformOriginPoint(QPointF(0,0))
+        
+    def poista(self):
+        self.scene().view().kappalelista.remove(self)
+        self.scene().removeItem(self)
     
     def palautaNaapuri(self, nro):
         return self.naapurikappaleet[nro]
@@ -354,7 +358,7 @@ class Kaarre30mini(Ratakappale):
     
     def paint(self, painter, option, widget):
         pass
-    
+        
     
     
     
