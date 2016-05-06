@@ -8,7 +8,7 @@ from PyQt4.QtCore import *
 
 class MyScene(QGraphicsScene):
     '''
-    classdocs
+    Scene.
     '''
 
 
@@ -22,7 +22,7 @@ class MyScene(QGraphicsScene):
         views = self.views()
         return views[0]
         
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event): #Tämä olisi muuten toteutettu MyView luokassa, mutta MyView luokan mouseMoveEvent ei osaa antaa scenen koordinaatteva event.scenePos()
         selected_items = self.selectedItems()
         if selected_items:
             currentItem = selected_items[0]

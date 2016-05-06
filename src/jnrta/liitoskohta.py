@@ -8,7 +8,7 @@ from PyQt4.QtCore import *
 
 class Liitoskohta(QGraphicsRectItem):
     '''
-    classdocs
+    Luokka joka käsittelee kappaleiden toisiinsa liittämistä.
     '''
 
 
@@ -27,8 +27,6 @@ class Liitoskohta(QGraphicsRectItem):
         self.setBrush(QColor(150,210,230))
         self.setRotation(self.suunta)
         self.setPos(x,y)
-        #arrow = QGraphicsRectItem(2,-2,10,4,self)
-        #arrow.setBrush(QColor(0,0,250))
         
     def isFree(self):
         return self.vapaa
@@ -46,6 +44,7 @@ class Liitoskohta(QGraphicsRectItem):
         return self.parentItem().parentItem()
         
     def liita(self, vastaliitos, rakenna):
+        'Liittää ratakappaleet toisiinsa'
         self.vastapala = vastaliitos
         self.vastapala.vastapala = self
         self.vapaa = False
@@ -53,7 +52,7 @@ class Liitoskohta(QGraphicsRectItem):
         
         self.ratakappale().naapurikappaleet.append(vastaliitos.ratakappale())
         self.vastapala.ratakappale().naapurikappaleet.append(self.ratakappale())
-        #print(self.ratakappale().naapurikappaleet)
+
         
         if rakenna == 0:
             loopfound = self.ratakappale().loopFound(self.ratakappale(),self.ratakappale())

@@ -8,7 +8,7 @@ from PyQt4.QtCore import *
 
 class MyView(QGraphicsView):
     '''
-    classdocs
+    Näkymä.
     '''
 
 
@@ -41,9 +41,6 @@ class MyView(QGraphicsView):
                 
         else:
             currentItem = selected_items[0]
-            #print("Item:",currentItem.pos().x(),currentItem.pos().y())
-            #print("Scene:",currentItem.scenePos().x(),currentItem.scenePos().y())
-            #print("event.pos():",event.pos().x(),event.pos().y())
             collision = False
             
             for anotherItem in self.kappalelista:
@@ -58,13 +55,7 @@ class MyView(QGraphicsView):
                     n = len(self.tempLiitokset)
                     for i in range(0,n):
                         self.tempLiitokset[i].liita(self.tempVastineet[i],0)
-                #currentItem.setPos(event.pos())
-        #self.pathitem.setFlag(0x1,True) #ItemIsMovable
-        #self.pathitem.setFlag(0x2,True)
-                                
-            #print("##",event.pos().x(),event.pos().y(),"##")
-            #print(currentItem.mapToScene(QPoint(0,0)).x(),currentItem.mapToScene(QPoint(0,0)).y())
-        
+                
     def keyPressEvent(self, event):
         selected_items = self.scene().selectedItems()
         if selected_items:
