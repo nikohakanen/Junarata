@@ -29,7 +29,10 @@ class MyView(QGraphicsView):
         
         if not selected_items:
                 currentItem = self.itemAt(event.pos())
+
                 if currentItem is not None:
+                    if currentItem.brush().color() == QColor(170,0,0) or currentItem.brush().color() == QColor(150,210,230):
+                        currentItem = currentItem.parentItem()
                     currentItem.setSelected(True)
                     currentItem.parentItem().setZValue(1)
                     for liitoskohta in currentItem.parentItem().liitoskohdat:
@@ -54,7 +57,7 @@ class MyView(QGraphicsView):
                 if self.liitosOk:
                     n = len(self.tempLiitokset)
                     for i in range(0,n):
-                        self.tempLiitokset[i].liita(self.tempVastineet[i])
+                        self.tempLiitokset[i].liita(self.tempVastineet[i],0)
                 #currentItem.setPos(event.pos())
         #self.pathitem.setFlag(0x1,True) #ItemIsMovable
         #self.pathitem.setFlag(0x2,True)
@@ -86,7 +89,7 @@ class MyView(QGraphicsView):
                             for vastakohta in anotherItem.liitoskohdat:
                                 if vastakohta.vapaa:
                                     if liitoskohta.collidesWithItem(vastakohta,0x1):
-                                        liitoskohta.liita(vastakohta)
+                                        liitoskohta.liita(vastakohta,1)
                                         
     def LoopText(self):
         self.textItem = QGraphicsTextItem()

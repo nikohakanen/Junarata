@@ -22,13 +22,13 @@ class Liitoskohta(QGraphicsRectItem):
         self.suunta = kierto % 360
         self.vapaa = True
         self.vastapala = None
+        self.tyyppi = -1
         
-        self.setBrush(QColor(0,200,250))
-        self.setOpacity(0.5)
+        self.setBrush(QColor(150,210,230))
         self.setRotation(self.suunta)
         self.setPos(x,y)
-        arrow = QGraphicsRectItem(2,-2,10,4,self)
-        arrow.setBrush(QColor(0,0,250))
+        #arrow = QGraphicsRectItem(2,-2,10,4,self)
+        #arrow.setBrush(QColor(0,0,250))
         
     def isFree(self):
         return self.vapaa
@@ -45,7 +45,7 @@ class Liitoskohta(QGraphicsRectItem):
         # Returns the Ratakappale grandparent item
         return self.parentItem().parentItem()
         
-    def liita(self, vastaliitos):
+    def liita(self, vastaliitos, rakenna):
         self.vastapala = vastaliitos
         self.vastapala.vastapala = self
         self.vapaa = False
@@ -55,9 +55,10 @@ class Liitoskohta(QGraphicsRectItem):
         self.vastapala.ratakappale().naapurikappaleet.append(self.ratakappale())
         #print(self.ratakappale().naapurikappaleet)
         
-        loopfound = self.ratakappale().loopFound(self.ratakappale(),self.ratakappale())
-        if loopfound:
-            self.ratakappale().scene().view().LoopText()
+        if rakenna == 0:
+            loopfound = self.ratakappale().loopFound(self.ratakappale(),self.ratakappale())
+            if loopfound:
+                self.ratakappale().scene().view().LoopText()
         
         
         
