@@ -6,8 +6,8 @@ Created on Mar 17, 2016
 import sys
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from jnrta.kappale import *
-from jnrta.centralwidget import *
+from kappale import *
+from centralwidget import *
 
 class User(QMainWindow):
     '''

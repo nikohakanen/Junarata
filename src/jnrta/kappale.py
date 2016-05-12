@@ -5,7 +5,7 @@ Created on Mar 29, 2016
 '''
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from jnrta.liitoskohta import *
+from liitoskohta import *
 import math
 
 class Ratakappale(QGraphicsItem):

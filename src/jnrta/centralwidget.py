@@ -4,8 +4,8 @@ Created on Apr 15, 2016
 @author: hakanen1
 '''
 from PyQt4.QtGui import *
-from jnrta.myview import *
-from jnrta.myscene import *
+from myview import *
+from myscene import *
 
 class CentralWidget(QDialog):
     '''
