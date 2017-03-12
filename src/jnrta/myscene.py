@@ -3,8 +3,7 @@ Created on May 5, 2016
 
 @author: hakanen1
 '''
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt4.QtGui import QGraphicsScene, QColor
 
 class MyScene(QGraphicsScene):
     '''
@@ -17,12 +16,13 @@ class MyScene(QGraphicsScene):
         Constructor
         '''
         super(MyScene, self).__init__(parent)
-        
+
     def view(self):
         views = self.views()
         return views[0]
-        
-    def mouseMoveEvent(self, event): #Tämä olisi muuten toteutettu MyView luokassa, mutta MyView luokan mouseMoveEvent ei osaa antaa scenen koordinaatteva event.scenePos()
+
+    #Tämä olisi muuten toteutettu MyView luokassa, mutta MyView luokan mouseMoveEvent ei osaa antaa scenen koordinaatteja event.scenePos()
+    def mouseMoveEvent(self, event):
         selected_items = self.selectedItems()
         if selected_items:
             currentItem = selected_items[0]
@@ -41,11 +41,11 @@ class MyScene(QGraphicsScene):
                                 if liitoskohta.collidesWithItem(vastakohta,0x1):
                                     dxy = liitoskohta.scenePos()-vastakohta.scenePos()
                                     vastakierto = vastakohta.suunta + 180 - liitoskohta.suunta
-                                    
-                                    
+
+
                                     currentItem.parentItem().pyorita(vastakierto)
                                     currentItem.setPos(currentItem.scenePos()-dxy)
-                                    
+
                                     self.view().liitosOk = True
                                     if not liitoskohta in self.view().tempLiitokset:
                                         self.view().tempLiitokset.append(liitoskohta)

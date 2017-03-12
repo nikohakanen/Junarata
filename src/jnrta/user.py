@@ -1,116 +1,117 @@
+# -*- coding: utf-8 -*-
 '''
 Created on Mar 17, 2016
 
 @author: hakanen1
 '''
 import sys
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt4.QtGui import QMainWindow, QToolBar, QAction, QFileDialog, QApplication
 from kappale import *
 from centralwidget import *
 
 class User(QMainWindow):
     '''
-    Pääluokka joka rakentaa käyttöliittymän.
+    Pääluokka joka rakentaa käyttöliittymän. 
+    Ohjelma käynnistyy suorittamalla tämä tiedosto.
     '''
 
 
     def __init__(self):
         super(User, self).__init__()
-        
+
         self.kappalelista = []
         self.initUI()
-        
-    def initUI(self):      
+
+    def initUI(self):
 
         mb = self.menuBar()
         fileMenu = mb.addMenu('Tiedosto')
-        
+
         tb = QToolBar()
         self.addToolBar(0x1,tb)
 
         self.cw = CentralWidget(self, self.kappalelista)
-        
+
         self.setGeometry(0, 0, 1200, 800)
         self.setWindowTitle('Pienoisrautatie')
-        
-        
+
+
         self.setCentralWidget(self.cw.view)
         self.show()
-        
+
         #QActionit voisi tehdä lyhyemmin
         newAction = QAction("Uusi", self)
         self.connect(newAction, SIGNAL("triggered()"), self.uusiRata)
         fileMenu.addAction(newAction)
-        
+
         openAction = QAction("Avaa", self)
         self.connect(openAction, SIGNAL("triggered()"), self.avaaRata)
         fileMenu.addAction(openAction)
-        
+
         saveAction = QAction("Tallenna", self)
         self.connect(saveAction, SIGNAL("triggered()"), self.tallennaRata)
         fileMenu.addAction(saveAction)
-        
+
         closeAction = QAction("Sulje", self)
         self.connect(closeAction, SIGNAL("triggered()"), self.sulje)
         fileMenu.addAction(closeAction)
-        
+
         action0 = QAction("Stopperi",self)
         self.connect(action0, SIGNAL("triggered()"), self.setValitseKpl0)
         tb.addAction(action0)
-        
+
         action1 = QAction("MiniSuora",self)
         self.connect(action1, SIGNAL("triggered()"), self.setValitseKpl1)
         tb.addAction(action1)
-        
+
         action2 = QAction("Suora",self)
         self.connect(action2, SIGNAL("triggered()"), self.setValitseKpl2)
         tb.addAction(action2)
-        
+
         action3 = QAction("IsoSuora",self)
         self.connect(action3, SIGNAL("triggered()"), self.setValitseKpl3)
         tb.addAction(action3)
-        
+
         action4 = QAction("Kaarre45",self)
         self.connect(action4, SIGNAL("triggered()"), self.setValitseKpl4)
         tb.addAction(action4)
-        
+
         action5 = QAction("Kaarre30",self)
         self.connect(action5, SIGNAL("triggered()"), self.setValitseKpl5)
         tb.addAction(action5)
-        
+
         action6 = QAction("MiniKaarre45",self)
         self.connect(action6, SIGNAL("triggered()"), self.setValitseKpl6)
         tb.addAction(action6)
-        
+
         action7 = QAction("MiniKaarre30",self)
         self.connect(action7, SIGNAL("triggered()"), self.setValitseKpl7)
         tb.addAction(action7)
-        
+
         action8 = QAction("Risteys",self)
         self.connect(action8, SIGNAL("triggered()"), self.setValitseKpl8)
         tb.addAction(action8)
-        
+
         action9 = QAction("Vinoristeys",self)
         self.connect(action9, SIGNAL("triggered()"), self.setValitseKpl9)
         tb.addAction(action9)
-        
+
         action10 = QAction("3-vaihde",self)
         self.connect(action10, SIGNAL("triggered()"), self.setValitseKpl10)
         tb.addAction(action10)
-        
+
         action11 = QAction("3-vaihde (peili)",self)
         self.connect(action11, SIGNAL("triggered()"), self.setValitseKpl11)
         tb.addAction(action11)
-        
+
         action12 = QAction("4-vaihde",self)
         self.connect(action12, SIGNAL("triggered()"), self.setValitseKpl12)
         tb.addAction(action12)
-        
+
     def uusiRata(self):
         del self.kappalelista[:]
         self.cw.scene.clear()
-        
+
     def tallennaRata(self):
         fileName = QFileDialog.getSaveFileName(self, 'Save File','jnrta','*.txt')
         if fileName:
@@ -121,7 +122,7 @@ class User(QMainWindow):
             with open(fileName, mode='w') as f:
                 for kpl in self.kappalelista:
                     f.write('{}\n{}\n{}\n{}\n'.format(kpl.tyyppi, kpl.item.pos().x(), kpl.item.pos().y(), kpl.kierto))
-    
+
     def avaaRata(self):
         try:
             fileName = QFileDialog.getOpenFileName(self, 'Open File','jnrta','*.txt')
@@ -140,11 +141,11 @@ class User(QMainWindow):
         except:
             print('User tried to open corrupt data. Closing program.')
             self.sulje()
-        
+
     def sulje(self):
         self.close()
-    
-    # Liittyy QActioneihin, voisi mahdollisesti tehdä tehokkaammin
+
+    # QActioneiden metodit, voisi tehdä lyhyemmin
     def setValitseKpl0(self):
         self.valitseKpl(0, -1000, -1000, 0, 1)
     def setValitseKpl1(self):
@@ -171,8 +172,8 @@ class User(QMainWindow):
         self.valitseKpl(11, -1000, -1000, 0, 1)
     def setValitseKpl12(self):
         self.valitseKpl(12, -1000, -1000, 0, 1)
-        
-        
+
+    # Kutsuu lisaaKpl valitulle ratakappaleelle
     def valitseKpl(self, nro, x, y, kierto, selected):
         if nro == 0:
             stopperi = Stopperi([x,y])
@@ -213,7 +214,8 @@ class User(QMainWindow):
         if nro == 12:
             v4 = vaihde4([x,y])
             self.lisaaKpl(v4, kierto, selected)
-        
+
+    # Lisää valitun ratakappaleen alustalle
     def lisaaKpl(self, ratakappale, kierto, selected):
         self.kappalelista.append(ratakappale)
         ratakappale.item.setParentItem(ratakappale)
@@ -224,7 +226,7 @@ class User(QMainWindow):
             ratakappale.pyorita(kierto)
 
 def main():
-    
+
         app = QApplication(sys.argv)
         usr = User()
         sys.exit(app.exec_())

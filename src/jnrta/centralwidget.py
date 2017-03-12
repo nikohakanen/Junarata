@@ -3,9 +3,9 @@ Created on Apr 15, 2016
 
 @author: hakanen1
 '''
-from PyQt4.QtGui import *
-from myview import *
-from myscene import *
+from PyQt4.QtGui import QDialog, CentralWidget
+from myview import MyView
+from myscene import MyScene
 
 class CentralWidget(QDialog):
     '''
